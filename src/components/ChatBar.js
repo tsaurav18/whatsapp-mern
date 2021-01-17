@@ -5,20 +5,26 @@ import "../css/Chat.css"
 import { AttachFile, SearchOutlined,MoreVert } from '@material-ui/icons';
 import MicIcon from "@material-ui/icons/Mic"
 import axios from "../axios"
+import { useStateValue } from '../StateProvider';
+
 function ChatBar({messages}) {
+    const [{user}, dispatch] = useStateValue();
     const [input, setInput] = useState("");
-    
+
+
     const sendMessage=async(e)=>{
         e.preventDefault();
   await axios.post('/messages/new',{
        message:input,
-       name:"demo name",
-       timestamp:"just now",
-       received:false
+       name:user.displayName,
+       timestamp:new Date().toLocaleString().replace(",","").replace(/:.. /," "),
+       received:true
    })
 
 setInput("")
     }
+
+    
     return (
         <div className="chat">
        <div className="chat__header">
@@ -47,7 +53,8 @@ setInput("")
                 <span className="chat__timestamp">
                     {message.timestamp}
                 </span>
-                </p>))}
+                </p>))
+                }
            
               
 
